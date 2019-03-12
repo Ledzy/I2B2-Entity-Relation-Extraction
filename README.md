@@ -1,6 +1,8 @@
 # Medical-Info-Extraction
 Extracting the information of medical text using LSTM
 
+Note for the embedding file GoogleNews-vectors-negative300.bin, you can download from https://code.google.com/archive/p/word2vec/.
+
 The medical text used for the program is formated as follows:
 
 1 line for the medical sentence
