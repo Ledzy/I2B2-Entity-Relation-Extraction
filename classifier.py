@@ -90,5 +90,6 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 model.fit([X_train_indices,prob_test_matrix], Y_train, epochs=5, batch_size=500,validation_split=0.2, shuffle=True)
 
 
+
 #save the model
 model.save('medical_model.h5')
