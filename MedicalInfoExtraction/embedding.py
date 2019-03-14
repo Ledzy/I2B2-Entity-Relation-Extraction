@@ -11,26 +11,22 @@ def pretrained_embedding_layer(word_to_vec_map, word_to_index):
     emb_matrix = np.zeros((vocab_length, emb_dim))
 
     success = 0
-    fail = 0
+    fail = []
     for word, index in word_to_index.items():
         try:
             emb_matrix[index,:] = word_to_vec_map[word]
             success += 1
 
         except Exception as e:
-            false += 1
-            # print(e)
-            emb_matrix[index,:] = np.zeros((emb_dim,))
+            fail.append(word)
+            emb_matrix[index,:] = -np.random.randn(emb_dim)/20
 
-    print(success, 'words have embedding')
-    print(fail, 'words don\'t have embedding')
+
     embedding_layer = Embedding(vocab_length,emb_dim,trainable=True)
 
     embedding_layer.build((None,))
 
     embedding_layer.set_weights([emb_matrix])
-
-
 
     return embedding_layer
 

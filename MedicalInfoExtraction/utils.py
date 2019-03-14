@@ -1,5 +1,6 @@
 import numpy as np
 from keras.utils import to_categorical
+import re
 
 #get the function of word_to_index and index_to_word. 
 def load_word_map(data):
@@ -43,8 +44,12 @@ def sentences_to_indices(X, word_to_index, max_len):
 
         j = 0
         for word in sentence_words:
-            X_indices[i,j] = word_to_index[word]
-            j += 1
+            try:
+                X_indices[i,j] = word_to_index[word]
+                j += 1
+            except Exception as e:
+                print(e)
+                print(word, end='')
         
     return X_indices
 
@@ -58,3 +63,30 @@ def get_tag_to_index(data):
         tag_to_index[i] = index
         index += 1
     return tag_to_index
+
+
+def prob_test_matrix(data,max_len):
+    test_info = data[1::5]
+    prob_info = data[2::5]
+    test_pos = []
+    prob_pos = []
+
+    for key in test_info:
+        pos = [int(i) for i in re.findall('\d+',key)]
+        test_pos.append(pos)
+
+    for key in prob_info:
+        pos = [int(i) for i in re.findall('\d+',key)]
+        prob_pos.append(pos)
+
+    # test_pos_oht = to_categorical(test_pos)
+    # prob_pos_oht = -to_categorical(prob_pos)
+
+    prob_test_matrix = np.zeros([len(test_info),max_len,300])
+
+    for i in range(len(test_info)):
+
+        prob_test_matrix[i,prob_pos[i][0]:prob_pos[i][1]+1] = 1
+        prob_test_matrix[i,test_pos[i][0]:test_pos[i][1]+1] = -1
+
+    return prob_test_matrix
