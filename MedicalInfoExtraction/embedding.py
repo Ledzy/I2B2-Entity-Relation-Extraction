@@ -30,6 +30,8 @@ def pretrained_embedding_layer(word_to_vec_map, word_to_index):
 
     embedding_layer.set_weights([emb_matrix])
 
+
+
     return embedding_layer
 
 
