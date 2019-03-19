@@ -13,3 +13,6 @@ The medical text used for the program is formated as follows:
 The job is to get the tag with the given medical context and the information of test & problem.
 
 Currently, a simple LSTM approach is applied with only test input. The accuracy is around 65%. More refinement of the network would be done later.
+
+------2019.3.19 update-------
+The test and problem information have been added to the model. The accuracy has been further elevated by 30 percent!
