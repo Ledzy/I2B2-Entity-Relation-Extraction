@@ -14,5 +14,4 @@ The job is to get the tag with the given medical context and the information of 
 
 Currently, a simple LSTM approach is applied with only test input. The accuracy is around 65%. More refinement of the network would be done later.
 
-Network Structure:
-https://github.com/Ledzy/Medical-Info-Extraction/blob/master/MedicalInfoExtraction/network%20structure.PNG
+![Network Structure]:https://github.com/Ledzy/Medical-Info-Extraction/blob/master/MedicalInfoExtraction/network%20structure.PNG
