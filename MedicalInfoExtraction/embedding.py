@@ -31,5 +31,5 @@ def pretrained_embedding_layer(word_to_vec_map, word_to_index):
     return embedding_layer
 
 
-
+#123
 
