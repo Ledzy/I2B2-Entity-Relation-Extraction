@@ -79,7 +79,7 @@ Y_train = to_categorical(Y_indices)
 
 
 #balance the training set
-# ros = RandomOverSampler(random_state=0)
+# ros = RandomOverSampler(random_state=0) #repeat all tags to the same #of the largest tags
 ros = RandomUnderSampler(replacement=True, random_state=0)    #Reduce the size of largest tags
 X_resampled, Y_resampled = ros.fit_sample(X_train_indices, Y_train)
 prob_test_matrix,_ = ros.fit_sample(prob_test_matrix, Y_train)
