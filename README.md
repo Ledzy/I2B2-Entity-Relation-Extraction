@@ -16,4 +16,3 @@ Currently, a simple LSTM approach is applied with only test input. The accuracy 
 
 ![Image text](https://github.com/Ledzy/Medical-Info-Extraction/blob/master/MedicalInfoExtraction/network%20structure.PNG)
 
-![Image text](https://raw.github.com/yourName/repositpry/master/yourprojectName/img-folder/test.jpg)
