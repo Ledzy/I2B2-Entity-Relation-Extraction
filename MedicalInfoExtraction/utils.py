@@ -55,14 +55,19 @@ def sentences_to_indices(X, word_to_index, max_len):
 
 
 #get 6 tags from the data
-def get_tag_to_index(data):
+def load_tag(data):
     tag = set(data[3::5])
     tag_to_index = {}
+    index_to_tag = {}
     index = 0
     for i in tag:
         tag_to_index[i] = index
         index += 1
-    return tag_to_index
+
+    for index, tag in tag_to_index.items():
+        index_to_tag[index] = tag
+
+    return tag_to_index,index_to_tag
 
 '''get the problem/test information from data,
     and build a matrix such that for word tagged
