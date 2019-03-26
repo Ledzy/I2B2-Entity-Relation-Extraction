@@ -69,6 +69,7 @@ def load_tag(data):
 
     return tag_to_index,index_to_tag
 
+
 '''get the problem/test information from data,
     and build a matrix such that for word tagged
     as problem, the relative cell would be 1. For 

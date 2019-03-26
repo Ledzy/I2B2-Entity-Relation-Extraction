@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from keras.layers import Dense, Input, LSTM ,Dropout, Activation, Bidirectional
+from keras.layers import Dense, Input, CuDNNLSTM ,Dropout, Activation, Bidirectional
 from keras.models import Model
 from keras.layers.embeddings import Embedding
 from keras.layers import concatenate
@@ -14,7 +14,10 @@ from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
 import numpy as np
 import random
+import os
+
  
+os.environ["CUDA_VISIBLE_DEVICES"] = "3" #specify the GPU
 
 
 
@@ -32,9 +35,9 @@ def classifier(input_shape, input_shape2, word_to_vec_map, word_to_index):
     embeddings = concatenate([embeddings,prob_test_oht], axis=-1)
 
     #propogate the data through layers
-    X = Bidirectional(LSTM(128, return_sequences = True))(embeddings)
+    X = Bidirectional(CuDNNLSTM(128, return_sequences = True))(embeddings)
     X = Dropout(0.4)(X)
-    X = Bidirectional(LSTM(128, return_sequences = False))(X)
+    X = Bidirectional(CuDNNLSTM(128, return_sequences = False))(X)
     X = Dropout(0.4)(X)
     X = Dense(6)(X)
     X = Activation('softmax')(X)
@@ -77,32 +80,46 @@ X_train_indices = sentences_to_indices(X,word_to_index,max_len)
 Y_train = to_categorical(Y_indices)
 
 
-
 #balance the training set
-# ros = RandomOverSampler(random_state=0) #repeat all tags to the same #of the largest tags
-ros = RandomUnderSampler(replacement=True, random_state=0)    #Reduce the size of largest tags
-X_resampled, Y_resampled = ros.fit_sample(X_train_indices, Y_train)
-prob_test_matrix,_ = ros.fit_sample(prob_test_matrix, Y_train)
+ros = RandomOverSampler(random_state=0) #repeat all tags to the same #of the largest tags
+# ros = RandomUnderSampler(replacement=True, random_state=0)    #Reduce the size of largest tags
+
+#shuflle 
+index = [i for i in range(len(X_train_indices))]
+random.shuffle(index)
+prob_test_matrix = np.array([prob_test_matrix[i] for i in index])
+X_train_indices = np.array([X_train_indices[i] for i in index])
+Y_train = np.array([Y_train[i] for i in index])
+
+#split into train and test
+X_train = X_train_indices[:int(0.8*len(X_train_indices))]
+X_test = X_train_indices[int(0.8*len(X_train_indices)):]
+Y_test = Y_train[int(0.8*len(X_train_indices)):]
+Y_train = Y_train[:int(0.8*len(X_train_indices))]
+prob_test_matrix_train = prob_test_matrix[:int(0.8*len(X_train_indices))]
+prob_test_matrix_test = prob_test_matrix[int(0.8*len(X_train_indices)):]
+
+X_resampled_train, Y_resampled_train = ros.fit_sample(X_train, Y_train)
+X_resampled_test, Y_resampled_test = ros.fit_sample(X_test, Y_test)
+prob_test_matrix_train_resampled,_ = ros.fit_sample(prob_test_matrix_train, Y_train)
+prob_test_matrix_test_resampled,_ = ros.fit_sample(prob_test_matrix_test, Y_test)
 
 
 #expand the dimension
-pt_matrix = []
+pt_matrix_train = []
+pt_matrix_test = []
 prob_test_dim = 32
 for i in range(prob_test_dim):
-    pt_matrix.append(prob_test_matrix)
+    pt_matrix_train.append(prob_test_matrix_train_resampled)
+    pt_matrix_test.append(prob_test_matrix_test_resampled)
 
-#format the dimension
-pt_matrix = np.transpose(pt_matrix,(1,2,0))
+#format the order of dimension
+pt_matrix_train = np.transpose(pt_matrix_train,(1,2,0))
+pt_matrix_test = np.transpose(pt_matrix_test,(1,2,0))
 
 
-#shuffle the dataset 
-index = [i for i in range(len(pt_matrix))]
-random.shuffle(index)
-pt_matrix = np.array([pt_matrix[i] for i in index])
-X_resampled = np.array([X_resampled[i] for i in index])
-Y_resampled = np.array([Y_resampled[i] for i in index])
 
-#split the data into five parts for cross validation, then train the model
+#split validation of the model, can be omitted
 data_split = 5
 train_log = []
 for i in range(data_split):
@@ -120,7 +137,7 @@ for i in range(data_split):
     print('Constructing the model, split ',i)
     model = classifier((max_len,),(max_len,32),word_to_vec_map,word_to_index)
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    History = model.fit([X_resampled_train,pt_matrix_train], Y_resampled_train, epochs=5, batch_size=50,validation_data=([X_resampled_test,pt_matrix_test],Y_resampled_test), shuffle=True)
+    History = model.fit([X_resampled_train,pt_matrix_train], Y_resampled_train, epochs=1, batch_size=50,validation_data=([X_resampled_test,pt_matrix_test],Y_resampled_test), shuffle=True)
 
     history = History.history
     acc,loss,val_acc,val_loss = history['acc'][-1], history['loss'][-1], history['val_acc'][-1], history['val_loss'][-1]
@@ -130,7 +147,7 @@ for i in range(data_split):
 #print the performance of the model
 model = classifier((max_len,),(max_len,32),word_to_vec_map,word_to_index)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit([X_resampled,pt_matrix],Y_resampled,epochs=30,validation_split=0.2,batch_size=100,shuffle=True)
+model.fit([X_resampled_train,pt_matrix_train],Y_resampled_train,epochs=100,validation_data=([X_resampled_test,pt_matrix_test],Y_resampled_test),batch_size=100,shuffle=True)
 
 
 #save the model

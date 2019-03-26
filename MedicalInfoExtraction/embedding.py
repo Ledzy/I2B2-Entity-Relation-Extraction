@@ -22,7 +22,7 @@ def pretrained_embedding_layer(word_to_vec_map, word_to_index):
             emb_matrix[index,:] = -np.random.randn(emb_dim)/20
 
 
-    embedding_layer = Embedding(vocab_length,emb_dim,trainable=True)
+    embedding_layer = Embedding(vocab_length,emb_dim,trainable=False)
 
     embedding_layer.build((None,))
 
