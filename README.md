@@ -12,7 +12,7 @@ The medical text used for the program is formated as follows:
 
 The job is to get the tag with the given medical context and the information of test & problem.
 
-Currently, a simple LSTM approach is applied with only test input. The accuracy is around 65%. More refinement of the network would be done later.
+Currently, a simple LSTM approach is applied with only test input. The accuracy is around 74%. More refinement of the network would be done later.
 
 ![Image text](https://github.com/Ledzy/Medical-Info-Extraction/blob/master/MedicalInfoExtraction/network%20structure.PNG)
 
