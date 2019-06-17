@@ -1,3 +1,10 @@
+"""
+These code were written when i just started using keras, so
+i'm not familiar with keras preprocessing tools and thereby did
+a lot of repetitive work. I keep it here to be a record for myself,
+but i suggest you to read new_experiments which is more readable:)
+"""
+
 # coding=utf-8
 
 from keras.layers import Dense, Input, CuDNNLSTM ,Dropout, Activation, Bidirectional

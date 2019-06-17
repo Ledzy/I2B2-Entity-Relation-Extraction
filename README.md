@@ -1,4 +1,4 @@
-# Medical-Info-Extraction
+# I2B2-Entity-Relation-Extraction
 This repository contains several approaches of entity relation extraction, with regard to dataset i2b2, which i uploaded in the repository.
 
 Two main approaches are used and compared, which are
@@ -8,7 +8,7 @@ Two main approaches are used and compared, which are
 ## LSTM
 Several LSTM networks are tried. Since the dataset is relatively small and has a lot of repetitions, the model should not be too complex.
 Currently the best LSTM model for the task is as follows:
-![Image text](https://github.com/Ledzy/Medical-Info-Extraction/blob/master/LSTM_experiments/attention_lstm.png)
+![Image text](https://github.com/Ledzy/I2B2-Entity-Relation-Extraction/blob/master/LSTM_experiments/attention_lstm.png)
 
 which references: 
 [Zhou, Peng, et al. "Attention-based bidirectional long short-term memory networks for relation classification." Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers). Vol. 2. 2016.](https://www.aclweb.org/anthology/P16-2034)
@@ -16,4 +16,4 @@ which references:
 Note for the embedding file GoogleNews-vectors-negative300.bin, you can download from https://code.google.com/archive/p/word2vec/.
 
 ## BERT
-To be added...
+
