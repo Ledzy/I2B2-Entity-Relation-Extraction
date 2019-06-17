@@ -74,8 +74,8 @@ val_y = tags[TRAIN_SIZE:]
 y = to_categorical(y-1)
 val_y = to_categorical(val_y-1)
 
-#due to the GPU memory limitation, just use 64 data to validate
-#the complete validation process would be done after the training process is over
+#due to the GPU memory limitation, just use 64 samples to validate
+#the complete validation process would be done after the training process is over, see the evaluate.py
 val_y = val_y[:64]
 val_X = val_X[:64]
 train_dataset = torch.utils.data.TensorDataset(torch.tensor(X,dtype=torch.long), torch.tensor(y,dtype=torch.float))
