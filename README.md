@@ -1,18 +1,19 @@
 # Medical-Info-Extraction
-Extracting the information of medical text using LSTM
+This repository contains several approaches of entity relation extraction, with regard to dataset i2b2, which i uploaded in the repository.
+
+Two main approaches are used and compared, which are
+* LSTM + attention mechanism
+* BERT, which is state-of-the-art NLP model
+
+## LSTM
+Several LSTM networks are tried. Since the dataset is relatively small and has a lot of repetitions, the model should not be too complex.
+Currently the best LSTM model for the task is as follows:
+![Image text](https://github.com/Ledzy/Medical-Info-Extraction/blob/master/MedicalInfoExtraction/图片1.png)
+
+which references: 
+[Zhou, Peng, et al. "Attention-based bidirectional long short-term memory networks for relation classification." Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers). Vol. 2. 2016.](https://www.aclweb.org/anthology/P16-2034)
 
 Note for the embedding file GoogleNews-vectors-negative300.bin, you can download from https://code.google.com/archive/p/word2vec/.
 
-The medical text used for the program is formated as follows:
-
-1 line for the medical sentence
-1 line for test information (the location of test word in the sentence)
-1 line for problem information (the location of problem in the sentence)
-1 line for Tag (What's the relationship of test and problem)
-
-The job is to get the tag with the given medical context and the information of test & problem.
-
-Currently, a simple LSTM approach is applied with only test input. The accuracy is around 74%. More refinement of the network would be done later.
-
-![Image text](https://github.com/Ledzy/Medical-Info-Extraction/blob/master/MedicalInfoExtraction/network%20structure.PNG)
-
+## BERT
+To be added...
